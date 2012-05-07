@@ -31,22 +31,22 @@
 #     return  eq; 
 #   }
 
-def getEquity(payouts, stacks, player):
-    total = 0.0
-    for s in stacks:
-        total += s
-    return getEquity2(payouts, stacks, total, player, 0)
-
-def getEquity2(payouts, stacks, total, player, depth):
-    eq = stacks[player] / total * payouts[depth]
-    if depth + 1 < len(payouts):
-        for i in xrange(0, len(stacks)):
-            if i != player and stacks[i] > 0:
-                c = stacks[i]
-                stacks[i] = 0.0
-                eq += getEquity2(payouts, stacks, total - c, player, depth + 1) * c / total
-                stacks[i] = c
-    return eq
+def getEquity(payouts, stacks, player, total=None, depth=None):
+    if not total:
+        total = 0.0
+        for s in stacks:
+            total += s
+        return getEquity(payouts, stacks, player, total, 0)
+    else:
+        eq = stacks[player] / total * payouts[depth]
+        if depth + 1 < len(payouts):
+            for i in xrange(0, len(stacks)):
+                if i != player and stacks[i] > 0:
+                    c = stacks[i]
+                    stacks[i] = 0.0
+                    eq += getEquity(payouts, stacks, player, total - c, depth + 1) * c / total
+                    stacks[i] = c
+        return eq
 
 
 te = 0.0
