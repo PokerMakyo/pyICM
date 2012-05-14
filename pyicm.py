@@ -33,6 +33,8 @@
 
 def getEquity(payouts, stacks, player, total=None, depth=None):
     if not total:
+        if stacks[player] == 0:
+            return 0
         total = 0.0
         for s in stacks:
             total += s
@@ -41,7 +43,7 @@ def getEquity(payouts, stacks, player, total=None, depth=None):
         eq = stacks[player] / total * payouts[depth]
         if depth + 1 < len(payouts):
             for i in xrange(0, len(stacks)):
-                if i != player and stacks[i] > 0:
+                if i != player and stacks[i] > 0.0:
                     c = stacks[i]
                     stacks[i] = 0.0
                     eq += getEquity(payouts, stacks, player, total - c, depth + 1) * c / total
@@ -49,11 +51,12 @@ def getEquity(payouts, stacks, player, total=None, depth=None):
         return eq
 
 
-te = 0.0
-for i in xrange(0,5):
-    e = getEquity([0.5, 0.3, 0.2], [1000, 2000, 1500, 500, 600], i)
-    print e
-    te+=e
-print te
+if __name__ == "__main__":
+    te = 0.0
+    for i in xrange(0,5):
+        e = getEquity([0.5, 0.3, 0.2], [1000, 2000, 1500, 500, 600], i)
+        print e
+        te+=e
+    print te
 
 # vim: filetype=python syntax=python expandtab shiftwidth=4 softtabstop=4
